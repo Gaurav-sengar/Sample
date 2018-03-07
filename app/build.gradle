@@ -9,7 +9,7 @@ android {
         compileSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+       // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -17,6 +17,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+    maven { url "https://maven.google.com" }
+}
+
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
 }
 
 dependencies {
@@ -28,9 +43,32 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
-group = 'com.brunhealth.sampleinterface'
-version = '1.0.1'
-task generateSourcesJar(type: Jar) { from android.sourceSets.main.java.srcDirs classifier 'sources' }
-task generateJavadocs(type: Javadoc) { source = android.sourceSets.main.java.srcDirs classpath += project.files(android.getBootClasspath() .join(File.pathSeparator)) }
-task generateJavadocsJar(type: Jar) { from generateJavadocs.destinationDir classifier 'javadoc' }
-generateJavadocsJar.dependsOn generateJavadocs
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'Sample'   // Has to be same as your library module name
+
+    publishedGroupId = 'com.fourtek'
+    libraryName = 'Sample'
+    artifact = 'sample'     // Has to be same as your library module name
+
+    libraryDescription = 'Android Library to test the sample created'
+
+    // Your github repo link
+    siteUrl = 'https://github.com/Gaurav-sengar/Sample'
+    gitUrl = 'https://github.com/Gaurav-sengar/Sample.git'
+    githubRepository= 'Gaurav-sengar/Sample'
+
+    libraryVersion = '1.0'
+
+    developerId = 'Gaurav-sengar'
+    developerName = 'Gaurav Sengar'
+    developerEmail = 'gauravsengar@fourtek.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/bintrayv1.gradle'
